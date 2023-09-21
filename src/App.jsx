@@ -1,13 +1,9 @@
-import FlexBox from "./componentes/FlexBox";
-import Login from "./pages/Login";
-import { ProviderPaypal } from "./paypal/ProviderPaypal";
+
+import AppRouter from "./routes/AppRouter";
 
 function App() {
   return (
-    <FlexBox>
-    <ProviderPaypal/>
-      <Login/>
-    </FlexBox>
+    <AppRouter/>
   );
 }
 

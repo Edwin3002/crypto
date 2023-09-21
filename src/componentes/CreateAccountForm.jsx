@@ -1,53 +1,66 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router";
 import FlexBox from "./FlexBox";
 import { H2 } from "./Typography";
 import AppTextField from "./inputs/AppTextField";
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router";
-import { LoginUser } from "../services/auth.services";
+import { CreateAccount } from "../services/auth.services";
 
-const LoginFormulario = () => {
+const CreateAccountForm = () => {
   const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .required("El correo electrónico es requerido")
       .email("Correo electrónico no válido"),
-    password: Yup.string().required("La contraseña es requerida"),
+    phoneNumber: Yup.string().required("El teléfono es requerido"),
+    password: Yup.string()
+      .required('La contraseña es requerida')
+      .min(8, 'La contraseña debe tener al menos 8 caracteres'),
+    name: Yup.string().required("El nombre es requerido"),
   });
 
   const formik = useFormik({
     initialValues: {
       email: "",
+      phoneNumber: "",
       password: "",
+      name: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const response = await LoginUser(values);
-
-      if (true) {
-      // if (response.success) {
+      const response = await CreateAccount(values);
+      if (response.success) {
         console.log("Inicio de sesión exitoso:", response.data);
         navigate("/dashboard");
-        
       } else {
         console.error("Error en el inicio de sesión:", response.message);
       }
     },
   });
 
-  const crearUsuario = () => {
-    navigate("/crear-cuenta");
-  };
-
+  
 
   return (
-    <FlexBox justifyContent="center" width>
+    <FlexBox justifyContent="center" width mt='2rem' mb='2rem'>
       <FlexBox width="70%" flexDirection="column">
         <H2 textAlign="center">Bienvenido a GSE crypto!</H2>
         <form onSubmit={formik.handleSubmit}>
           <FlexBox flexDirection="column" mt={5}>
+            <AppTextField
+              autoFocus
+              sx={{ width: "100%", p: 0, mb: 3 }}
+              type="text"
+              name="name"
+              variant="outlined"
+              label="Nombre"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.name}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
+            />
             <AppTextField
               autoFocus
               sx={{ width: "100%", p: 0, mb: 3 }}
@@ -61,6 +74,24 @@ const LoginFormulario = () => {
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
             />
+            <AppTextField
+              autoFocus
+              sx={{ width: "100%", p: 0, mb: 3 }}
+              type="number"
+              name="phoneNumber"
+              variant="outlined"
+              label="Número de teléfono"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.phoneNumber}
+              error={
+                formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
+              }
+              helperText={
+                formik.touched.phoneNumber && formik.errors.phoneNumber
+              }
+            />
+
             <AppTextField
               sx={{ width: "100%", p: 0, mr: 0 }}
               type="password"
@@ -88,9 +119,9 @@ const LoginFormulario = () => {
             <FlexBox mt={4} width justifyContent="center">
               <u
                 style={{ cursor: "pointer", color: "#1565c0", fontWeight: 500 }}
-                onClick={crearUsuario}
+                onClick={()=>{navigate('/')}}
               >
-                No está registrado, cree una cuenta
+                ¿Ya está registrado? Inicie sesión
               </u>
             </FlexBox>
           </FlexBox>
@@ -100,4 +131,4 @@ const LoginFormulario = () => {
   );
 };
 
-export default LoginFormulario;
+export default CreateAccountForm;
