@@ -1,9 +1,9 @@
 import { MenuItem, TextField } from "@mui/material";
 import { Form, Formik } from "formik"
 import * as yup from "yup";
-import ModalSellForm from "../../componentes/modal/ModalPayForm";
+import ModalSellForm from "../../componentes/modal/ModalSellForm";
 
-const SellForm = ({ openModal, setOpenModalForm }) => {
+const SellForm = ({ openModal, setOpenModalForm, action }) => {
 
   const formatPrice = (price) => "$" + Intl.NumberFormat('de-DE').format(price);
 
@@ -12,9 +12,11 @@ const SellForm = ({ openModal, setOpenModalForm }) => {
       initialValues={{ amount: "", typeChange: 3900, changeAmount: "" }}
       validationSchema={yup.object({
         amount: yup.number()
-          .positive("EL campo debe ser positivo")
-          .integer("El campo debe ser un entero")
-          .min(10, "Mínimo el número 10")
+          .positive("EL campo debe ser un número positivo")
+          .integer("El campo debe ser un número un entero")
+          .min(10, "El monto mínimo de retirar es de 10 dólares")
+          .max(1000, "El monto máximo a retirar es de 1000 dólares")
+
           // .max(9, "Máximo el número 9")
           .typeError("El campo debe ser un número")
           .required("El campo es requerido"),
@@ -27,7 +29,9 @@ const SellForm = ({ openModal, setOpenModalForm }) => {
           <ModalSellForm
             openModal={openModal}
             handleCloseModal={() => setOpenModalForm(false)}
-            subtitle="Por favor indique el saldo a RETIRAR"
+            action={action}
+            title="Dólares a retirar"
+            subtitle="Por favor indique el saldo a retirar en dólares"
             okButtonText="Confirmar"
             dataForm={[
               {
@@ -35,14 +39,14 @@ const SellForm = ({ openModal, setOpenModalForm }) => {
                   {
                     type: "number",
                     name: "amount",
-                    label: "Valor a retirar USD",
+                    label: "Valor a retirar en dólares USD",
                   },
                   {
                     Component: <TextField
                       select
                       fullWidth
                       name="typeChange"
-                      label="Moneda"
+                      label="Selección de divisas"
                       variant="outlined"
                       onBlur={handleBlur}
                       onChange={handleChange}
@@ -60,7 +64,7 @@ const SellForm = ({ openModal, setOpenModalForm }) => {
                     disabled: true,
                     type: "text",
                     name: "changeAmount",
-                    label: "Valor de cambio",
+                    label: "Valor de divisa",
                     value: formatPrice(values.amount * values.typeChange),
                     size: [12, 8, 8]
                   }

@@ -7,9 +7,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Pagination
 } from "@mui/material";
 import { H2, Paragraph } from "./Typography";
-import { useTable } from "react-table";
+import { usePagination, useTable } from "react-table";
 import { useMemo } from "react";
 import FlexBox from "./FlexBox";
 
@@ -51,17 +52,36 @@ const BodyTableCell = styled(TableCell)(({ theme }) => ({
   [theme.breakpoints.between(960, 1270)]: { ...commonCSS },
 }));
 
-const Tabla = ({ columnas, data }) => {
+const Tabla = ({ columnas, data, esPaginable }) => {
   const columns = useMemo(() => columnas, [columnas]);
   const datos = useMemo(() => data, [data]);
 
-  const tableInstance = useTable({
-    columns,
-    data: datos,
-  });
+  const tableInstance = useTable(
+    {
+      columns,
+      data: datos,
+      initialState: {
+        pageSize: 5,
+      }
+    }, 
+    usePagination, 
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [...columns]);
+    }
+  );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+  const { 
+    getTableProps, 
+    getTableBodyProps, 
+    headerGroups, 
+    rows, 
+    prepareRow,
+    gotoPage,
+    page
+  } =
     tableInstance;
+
+  const handleChange = (_, currentPageNo) => gotoPage(currentPageNo - 1);
 
   return (
     <Box sx={{ width: "100%", overflowX: "auto" }}>
@@ -83,7 +103,7 @@ const Tabla = ({ columnas, data }) => {
           ))}
         </TableHead>
         <TableBody {...getTableBodyProps()}>
-          {rows.map((row) => {
+          {page?.map((row) => {
             prepareRow(row);
             return (
               <TableRow
@@ -104,6 +124,16 @@ const Tabla = ({ columnas, data }) => {
           })}
         </TableBody>
       </Table>
+      {esPaginable && (
+        <FlexBox justifyContent="flex-end" mt={2}>
+          <Pagination
+            count={tableInstance.pageCount}
+            onChange={handleChange}
+            color="primary"
+            size="small"
+          />
+        </FlexBox>
+      )}
     </Box>
   );
 };

@@ -1,12 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { H1, Paragraph } from "./Typography";
 import { Button, Grid } from "@mui/material";
 import PayForm from "../page-sections/paypal/PayForm";
 import SellForm from "../page-sections/paypal/SellForm";
+import { httpHelper } from "../helpers/http.helper";
+import { peticionErronea } from "../helpers/sweetAlert";
+import { formatPrice } from "../helpers/constans";
 
 const CardCurrency = () => {
   const [openModalForm, setOpenModalForm] = useState(false);
   const [openModalSellForm, setOpenModalSellForm] = useState(false);
+  const [saldoWallet, setSaldoWallet] = useState(0);
+
+  const getWallet = async () => {
+    const res = await httpHelper.get(`http://localhost:9051/transaction/wallet/${sessionStorage.getItem("token")}`)
+    if (res.success) {
+      setSaldoWallet(res.data?.[0]?.balance);
+    } else {
+      peticionErronea();
+    }
+  }
+
+  useEffect(() => {
+    getWallet();
+  }, [])
+
   return (
     <Grid
       container
@@ -25,12 +43,12 @@ const CardCurrency = () => {
       <Grid display="block">
         <Grid item>
           <Paragraph fontSize={20} fontWeight={400}>
-            Mi saldo a recargar
+            Mi saldo
           </Paragraph>
         </Grid>
         <Grid item>
           <H1 fontSize={40} color="text.secondary">
-            $1.000.100
+            {formatPrice(saldoWallet)}
           </H1>
         </Grid>
       </Grid>
@@ -50,8 +68,8 @@ const CardCurrency = () => {
           onClick={() => setOpenModalSellForm(true)}
         >Retirar
         </Button>
-        <PayForm openModal={openModalForm} setOpenModalForm={setOpenModalForm} />
-        <SellForm openModal={openModalSellForm} setOpenModalForm={setOpenModalSellForm} />
+        <PayForm action={getWallet} openModal={openModalForm} setOpenModalForm={setOpenModalForm} />
+        <SellForm  action={getWallet} openModal={openModalSellForm} setOpenModalForm={setOpenModalSellForm} />
       </Grid>
     </Grid>
   );

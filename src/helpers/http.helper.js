@@ -139,7 +139,7 @@ export const httpHelper = {
   handleUnauthorized: async (error) => {
     if (error.response && error.response.status === 401) {
       try {
-        await AxiosInstance.get('pay/wallet/');
+        await AxiosInstance.post('sign_in');
       } catch (fallbackError) {
         if (fallbackError.response && fallbackError.response.status === 401) {
           sessionStorage.removeItem('token');

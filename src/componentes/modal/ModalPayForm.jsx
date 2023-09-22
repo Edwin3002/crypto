@@ -6,9 +6,12 @@ import { useEffect } from "react";
 import RenderInputs from "../inputs/RenderInputs";
 import { H2, Paragraph } from "../Typography";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
-
+import { httpHelper } from "../../helpers/http.helper";
+import { tokenJwt } from "../../helpers/constans";
+// import { tokenJwt } from "../../helpers/constans";
 
 const ModalPayForm = ({
+  action,
   openModal = false,
   handleCloseModal,
   title = "",
@@ -28,7 +31,7 @@ const ModalPayForm = ({
 
   const { values, errors, resetForm } = useFormikContext();
 
-  const price = useRef(5)
+  const price = useRef(5);
 
   const createOrder = (data, actions) => {
     return actions.order.create({
@@ -43,14 +46,18 @@ const ModalPayForm = ({
   };
 
   const onApprove = async (data, actions) => {
-    const res = await actions.order.capture()
-    console.log(
-      res
-    );
+    const res = await httpHelper.put("http://localhost:9051/transaction/wallet/recharge", {
+      user: tokenJwt._id,
+      value: price.current
+    })
     handleCloseModal();
     resetForm();
-    notifyApprove();
-    return actions.order.capture();
+    if (res.success) {
+      notifyApprove();
+      action();
+    } else {
+      notifyCancel();
+    }
   };
 
   const notifyApprove = () => Swal.fire({
@@ -61,6 +68,7 @@ const ModalPayForm = ({
     confirmButtonColor: "#2E7D32",
     timer: 3500,
   })
+
   const notifyCancel = () => Swal.fire({
     title: '¡La compra ha sido denegada!',
     text: 'Revisa el estado de tu compra en transacciones',
@@ -70,8 +78,6 @@ const ModalPayForm = ({
     timer: 2000,
   })
 
-  // const notifyApprove = () => ("Transacción exitosa!");
-
   useEffect(() => {
     price.current = values.amount
   }, [values]);
@@ -80,7 +86,7 @@ const ModalPayForm = ({
     <Modal onClose={handleCloseModal} open={openModal} sx={{ display: "flex" }}>
       <Card sx={{ py: "30px", px: "32px", m: "auto" }}>
         <Stack rowGap={2}>
-          <H2>{title}</H2>
+          <H2 sx={{ textAlign: "center" }}>{title}</H2>
           {Icon}
 
           <Paragraph sx={{ textAlign: "center" }}>{subtitle}</Paragraph>
@@ -89,9 +95,15 @@ const ModalPayForm = ({
           </Box>
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant="outlined" onClick={handleCloseModal}>
+            <Button variant="outlined" onClick={() => { handleCloseModal(); resetForm() }}>
               {cancelButtonText}
             </Button>
+            {/* <Button variant="outlined" onClick={() => { console.log(price); }}>
+              price
+            </Button>
+            <Button variant="outlined" onClick={() => { onApprove() }}>
+              print
+            </Button> */}
             <PayPalScriptProvider options={{
               clientId
             }}>
@@ -99,9 +111,6 @@ const ModalPayForm = ({
                 createOrder={(data, actions) => createOrder(data, actions, values.amount)}
                 onApprove={(data, actions) => onApprove(data, actions)}
                 onCancel={(msg) => { console.log(msg); handleCloseModal(); resetForm(); notifyCancel(); }
-                  // createOrder={() => { }}
-                  // onApprove={() => { }}
-                  // onCancel={() => { }
                 }
               />
             </PayPalScriptProvider>

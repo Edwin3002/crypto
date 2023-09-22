@@ -1,8 +1,8 @@
-import React from 'react'
+/* eslint-disable react/prop-types */
 import FlexBox from './FlexBox'
 import { Paragraph } from './Typography'
 
-const ChipButtom = ({title, onClick}) => {
+const ChipButtom = ({title, notificacion}) => {
   return (
     <FlexBox
       alignItems="center"
@@ -19,7 +19,7 @@ const ChipButtom = ({title, onClick}) => {
       p={1}
       px={2}
       width="fit-content"
-      onClick={onClick}
+      onClick={notificacion}
     >
       <Paragraph sx={{color: "white", fontWeight: 400}}>{title}</Paragraph>
     </FlexBox>
