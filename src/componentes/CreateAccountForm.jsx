@@ -24,7 +24,7 @@ const CreateAccountForm = () => {
       .required("La contraseña es requerida")
       .min(8, "La contraseña debe tener al menos 8 caracteres"),
     fullName: Yup.string().required("El nombre es requerido"),
-    document: Yup.string().required("El nombre es requerido"),
+    document: Yup.string().required("El documento de identificación es requerido"),
     documentType: Yup.string().required("Seleccione el tipo de documento"),
   });
 

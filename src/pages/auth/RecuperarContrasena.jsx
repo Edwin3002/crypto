@@ -9,7 +9,7 @@ const RecuperarContrasena = () => {
   return (
     <FlexBox
       sx={{
-        backgroundImage: "url(src/assets/wave.svg)",
+        backgroundImage: "url(https://res.cloudinary.com/dfwy7qa1y/image/upload/v1695413916/wave_pe7d3l.svg)",
         backgroundSize: "contain",
         position: "relative",
         backgroundPosition: "bottom",

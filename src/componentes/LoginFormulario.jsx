@@ -27,8 +27,8 @@ const LoginFormulario = () => {
     onSubmit: async (values) => {
       
       const { success, data } = await LoginUser(values);
+      // const response = await LoginUser(values);
       if (success) {
-      // if (1) {
         console.log("Successful login. Navigating to /dashboard...");
         setTimeout(() => {
           navigate("/dashboard");
