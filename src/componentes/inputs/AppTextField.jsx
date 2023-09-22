@@ -36,10 +36,6 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiSvgIcon-root": {
     color: theme.palette.text.disabled,
   },
-
-  "& .MuiOutlinedInput-input:-webkit-autofill": {
-    WebkitBoxShadow: "0 0 0 100px #212746 inset;",
-  },
 }));
 
 const AppTextField = (props) => {

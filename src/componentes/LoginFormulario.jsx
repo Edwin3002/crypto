@@ -6,9 +6,11 @@ import AppTextField from "./inputs/AppTextField";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import { LoginUser } from "../services/auth.services";
+import { useState } from "react";
 
 const LoginFormulario = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState('')
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -25,21 +27,21 @@ const LoginFormulario = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const response = await LoginUser(values);
+      console.log(response)
 
-      if (true) {
       // if (response.success) {
-        console.log("Inicio de sesión exitoso:", response.data);
+      if (1) {
+        console.log("Inicio de sesión exitoso:", response);
         navigate("/dashboard");
         
       } else {
         console.error("Error en el inicio de sesión:", response.message);
+        setError('Credenciales invalidas');
       }
     },
   });
 
-  const crearUsuario = () => {
-    navigate("/crear-cuenta");
-  };
+
 
 
   return (
@@ -71,7 +73,8 @@ const LoginFormulario = () => {
               onBlur={formik.handleBlur}
               value={formik.values.password}
               error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
+              helperText={formik.touched.password && formik.errors.password ||
+                (error && "Credenciales inválidas")}
             />
             <FlexBox mt={4} width>
               <Button
@@ -88,7 +91,7 @@ const LoginFormulario = () => {
             <FlexBox mt={4} width justifyContent="center">
               <u
                 style={{ cursor: "pointer", color: "#1565c0", fontWeight: 500 }}
-                onClick={crearUsuario}
+                onClick={()=>{navigate('/crear-cuenta')}}
               >
                 No está registrado, cree una cuenta
               </u>

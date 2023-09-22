@@ -8,8 +8,9 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { H2, Small } from "./Typography";
-import { useNavigate } from "react-router";
+import { H2, Paragraph } from "./Typography";
+import { useTable } from "react-table";
+import { useMemo } from "react";
 import FlexBox from "./FlexBox";
 
 const commonCSS = {
@@ -32,11 +33,11 @@ const HeadTableCell = styled(TableCell)(() => ({
   "&:last-of-type": {
     paddingRight: 0,
   },
+  borderBottom: "none",
 }));
 const BodyTableCell = styled(TableCell)(({ theme }) => ({
-  fontSize: 12,
-  fontWeight: 500,
-  padding: 0,
+  fontSize: 13,
+  fontWeight: 400,
   paddingLeft: "1rem",
   paddingTop: "0.7rem",
   "&:first-of-type": {
@@ -45,79 +46,62 @@ const BodyTableCell = styled(TableCell)(({ theme }) => ({
   "&:last-of-type": {
     paddingRight: 0,
   },
+  padding: 16,
   [theme.breakpoints.down("sm")]: { ...commonCSS },
   [theme.breakpoints.between(960, 1270)]: { ...commonCSS },
 }));
 
-const Tabla = ({ headers, data }) => {
-  const navigate = useNavigate();
+const Tabla = ({ columnas, data }) => {
+  const columns = useMemo(() => columnas, [columnas]);
+  const datos = useMemo(() => data, [data]);
+
+  const tableInstance = useTable({
+    columns,
+    data: datos,
+  });
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
 
   return (
-    <Box
-      sx={{
-        padding: "2rem",
-      }}
-    >
-      <H2>Lista de Criptomonedas</H2>
-      <Table>
-        <TableHead
-          sx={{
-            borderBottom: "1px solid",
-            borderColor: "divider",
-          }}
-        >
-          <TableRow>
-            {headers.map((item) => (
-              <HeadTableCell key={item}>{item}</HeadTableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-          {data.map((item, index) => (
-            <TableRow key={index}>
-              {
-                console.log(item)
-              }
-              <BodyTableCell>
-                <Box alignItems="center" display="flex">
-                  <img src={item.image} alt="product title" width="40px" />
-                  <Box ml={2}>
-                    <small style={{ display: "block" }}>
-                      <Small>{item.nombre}</Small>
-                    </small>
-                    {item.detalle && (
-                      <small style={{ display: "block" }}>{item.detalle}</small>
-                    )}
-                  </Box>
-                </Box>
-              </BodyTableCell>
-              <BodyTableCell>{item.precio}</BodyTableCell>
-              <BodyTableCell>{item.cambio}</BodyTableCell>
-              <BodyTableCell>{item.volumen}</BodyTableCell>
-              <BodyTableCell>{item.capMercado}</BodyTableCell>
-              {item.fraccion && (
-                <BodyTableCell>{item.fraccion}</BodyTableCell>
-              )}
-              <BodyTableCell>
-                <small
-                  style={{
-                    backgroundColor: "#2196F3",
-                    borderRadius: "100px",
-                    padding: "8px",
-                    height: "32px",
-                    width: "83px",
-                    color: "white",
-                    size: "13px",
-                    cursor: "pointer  ",
-                  }}
-                  onClick={() => navigate("/detalle-cripto")}
-                >
-                  Ver Detalle
-                </small>
-              </BodyTableCell>
+    <Box sx={{ width: "100%", overflowX: "auto" }}>
+      <Table padding="checkbox" {...getTableProps()}>
+        <TableHead>
+          {headerGroups.map((headerGroup) => (
+            <TableRow
+              sx={{
+                borderBottom: "none",
+              }}
+              {...headerGroup.getHeaderGroupProps()}
+            >
+              {headerGroup.headers.map((column) => (
+                <HeadTableCell {...column.getHeaderProps()}>
+                  {column.render("Header")}
+                </HeadTableCell>
+              ))}
             </TableRow>
           ))}
+        </TableHead>
+        <TableBody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <TableRow
+                sx={{
+                    borderBottom: "none",
+                }}
+                {...row.getRowProps()}
+              >
+                {row.cells.map((cell) => {
+                  return (
+                    <BodyTableCell {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </BodyTableCell>
+                  );
+                })}
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </Box>

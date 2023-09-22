@@ -6,6 +6,8 @@ import FlexBox from "./FlexBox";
 import { H2 } from "./Typography";
 import AppTextField from "./inputs/AppTextField";
 import { CreateAccount } from "../services/auth.services";
+import SelectCrypto from "./select/selectCrypto";
+import documnetType from "../helpers/documentType.helper";
 
 const CreateAccountForm = () => {
   const navigate = useNavigate();
@@ -16,9 +18,12 @@ const CreateAccountForm = () => {
       .email("Correo electrónico no válido"),
     phoneNumber: Yup.string().required("El teléfono es requerido"),
     password: Yup.string()
-      .required('La contraseña es requerida')
-      .min(8, 'La contraseña debe tener al menos 8 caracteres'),
+      .required("La contraseña es requerida")
+      .min(8, "La contraseña debe tener al menos 8 caracteres"),
     name: Yup.string().required("El nombre es requerido"),
+    document: Yup.string().required("El nombre es requerido"),
+    documentType: Yup.string()
+    .required("Seleccione el tipo de documento")
   });
 
   const formik = useFormik({
@@ -27,6 +32,8 @@ const CreateAccountForm = () => {
       phoneNumber: "",
       password: "",
       name: "",
+      document: "",
+      documentType: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -40,10 +47,8 @@ const CreateAccountForm = () => {
     },
   });
 
-  
-
   return (
-    <FlexBox justifyContent="center" width mt='2rem' mb='2rem'>
+    <FlexBox justifyContent="center" width mt="2rem" mb="2rem">
       <FlexBox width="70%" flexDirection="column">
         <H2 textAlign="center">Bienvenido a GSE crypto!</H2>
         <form onSubmit={formik.handleSubmit}>
@@ -77,7 +82,7 @@ const CreateAccountForm = () => {
             <AppTextField
               autoFocus
               sx={{ width: "100%", p: 0, mb: 3 }}
-              type="number"
+              type="text"
               name="phoneNumber"
               variant="outlined"
               label="Número de teléfono"
@@ -90,6 +95,29 @@ const CreateAccountForm = () => {
               helperText={
                 formik.touched.phoneNumber && formik.errors.phoneNumber
               }
+            />
+
+            <SelectCrypto
+              label="Tipo de documento"
+              update={formik.values.documentType || ""}
+              onInputChanged={(value) => {
+                formik.setFieldValue("documentType", value);
+              }}
+              items={documnetType}
+            />
+
+            <AppTextField
+              autoFocus
+              sx={{ width: "100%", p: 0, mb: 3, mt:3 }}
+              type="text"
+              name="document"
+              variant="outlined"
+              label="Número de documento"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.document}
+              error={formik.touched.document && Boolean(formik.errors.document)}
+              helperText={formik.touched.document && formik.errors.document}
             />
 
             <AppTextField
@@ -113,13 +141,15 @@ const CreateAccountForm = () => {
                   padding: 2,
                 }}
               >
-                Ingresar
+                Registrarse
               </Button>
             </FlexBox>
             <FlexBox mt={4} width justifyContent="center">
               <u
                 style={{ cursor: "pointer", color: "#1565c0", fontWeight: 500 }}
-                onClick={()=>{navigate('/')}}
+                onClick={() => {
+                  navigate("/");
+                }}
               >
                 ¿Ya está registrado? Inicie sesión
               </u>

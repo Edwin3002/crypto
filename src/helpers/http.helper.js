@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_ENDPOINT = 'https://example.com/api'; 
+const API_ENDPOINT = 'http://127.0.0.1:9050'; 
 
 const AxiosInstance = axios.create({
   baseURL: API_ENDPOINT,

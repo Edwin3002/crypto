@@ -1,11 +1,17 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "../pages/auth/Login";
 import CrearCuenta from "../pages/auth/CrearCuenta";
-import Layout from "../Layout";
 import Dashboard from "../pages/Dashboard";
 import DetalleCripto from "../pages/DetalleCripto";
 
 const AppRouter = () => {
+  // const token = sessionStorage.getItem('token');
+  // if (!token) {
+  //   console.log('no hay token')
+     
+  //   return false;
+  // }
+
   return (
     <>
       <BrowserRouter>
@@ -25,17 +31,13 @@ const AppRouter = () => {
           <Route
             path="/dashboard"
             element={
-              <Layout>
                 <Dashboard />
-              </Layout>
             }
           />
           <Route
             path="/detalle-cripto"
             element={
-              <Layout>
                 <DetalleCripto />
-              </Layout>
             }
           />
         </Routes>

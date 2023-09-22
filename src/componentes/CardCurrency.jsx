@@ -1,38 +1,60 @@
-import { useState } from 'react'
-import FlexBox from './FlexBox'
-import { H1, Paragraph } from './Typography'
-import { Button, styled } from '@mui/material'
-import PayForm from '../paypal/PayForm';
+import { useState } from "react";
+import { H1, Paragraph } from "./Typography";
+import { Button, Grid } from "@mui/material";
+import PayForm from "../page-sections/paypal/PayForm";
+import SellForm from "../page-sections/paypal/SellForm";
 
-export const Card = styled(FlexBox)(() => ({
-  flexDirection: "column",
-  gap: 4,
-  borderRadius: 3,
-  backgroundColor: "white",
-}));
-
-const CardCurrency = (props) => {
-
-  const [openModalForm, setOpenModalForm] = useState(false)
+const CardCurrency = () => {
+  const [openModalForm, setOpenModalForm] = useState(false);
+  const [openModalSellForm, setOpenModalSellForm] = useState(false);
   return (
-    <Card {...props}>
-      <Paragraph fontSize={16}>Mi saldo</Paragraph>
-      <FlexBox justifyContent="space-between" width>
-        <H1 fontSize={40} color="#272727">$ 0.00</H1>
-        <FlexBox>
-          <Button
-            variant='contained'
-            type='submit'
-            sx={{ ml: 2, mt: 2 }}
-            onClick={() => setOpenModalForm(true)}
-          >Ingresar
-          </Button>
-          <PayForm openModal={openModalForm} setOpenModalForm={setOpenModalForm} />
-        </FlexBox>
-      </FlexBox>
-    </Card>
-  )
-}
+    <Grid
+      container
+      alignItems="center"
+      justifyContent="space-between"
+      direction={"row"}
+      sx={{
+        borderRadius: "0.75rem",
+        border: "1px solid #F0F0F0",
+        background: "#FFF",
+        boxShadow: " 0px 4px 8px 0px rgba(0, 0, 0, 0.10)",
+        height: "148px",
+      }}
+      px="1.56rem"
+    >
+      <Grid display="block">
+        <Grid item>
+          <Paragraph fontSize={20} fontWeight={400}>
+            Mi saldo a recargar
+          </Paragraph>
+        </Grid>
+        <Grid item>
+          <H1 fontSize={40} color="text.secondary">
+            $1.000.100
+          </H1>
+        </Grid>
+      </Grid>
+      <Grid>
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{ ml: 2, mt: 2 }}
+          onClick={() => setOpenModalForm(true)}
+        >
+          Recargar
+        </Button>
+        <Button
+          variant='outlined'
+          type='submit'
+          sx={{ ml: 2, mt: 2 }}
+          onClick={() => setOpenModalSellForm(true)}
+        >Retirar
+        </Button>
+        <PayForm openModal={openModalForm} setOpenModalForm={setOpenModalForm} />
+        <SellForm openModal={openModalSellForm} setOpenModalForm={setOpenModalSellForm} />
+      </Grid>
+    </Grid>
+  );
+};
 
-
-export default CardCurrency
+export default CardCurrency;

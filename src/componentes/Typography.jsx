@@ -14,6 +14,7 @@ export const H1 = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={28}
       component="h1"
       fontWeight={600}
@@ -31,6 +32,7 @@ export const H2 = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={24}
       component="h2"
       fontWeight={600}
@@ -48,6 +50,7 @@ export const H3 = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={18}
       component="h3"
       fontWeight={600}
@@ -65,6 +68,7 @@ export const H4 = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={16}
       component="h4"
       fontWeight={600}
@@ -82,6 +86,7 @@ export const H5 = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={14}
       component="h5"
       lineHeight={1}
@@ -100,6 +105,7 @@ export const H6 = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={13}
       component="h6"
       fontWeight={600}
@@ -117,6 +123,7 @@ export const Paragraph = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={14}
       component="p"
       fontWeight={500}
@@ -134,6 +141,7 @@ export const Small = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={13}
       component="small"
       fontWeight={500}
@@ -152,6 +160,7 @@ export const Span = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       fontSize={14}
       component="span"
       ellipsis={ellipsis}
@@ -168,6 +177,7 @@ export const Tiny = (props) => {
   const { ellipsis, children, className, ...others } = props;
   return (
     <StyledBox
+      sx={{color: "text.primary"}}
       component="p"
       fontSize={13}
       fontWeight={500}

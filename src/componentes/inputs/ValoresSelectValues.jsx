@@ -1,12 +1,14 @@
+import { MenuItem } from "@mui/material";
+
 export const ValoresSelectValues = ({ data, value, label }) => {
   return (
     <>
-      <option value=""></option>
+      <MenuItem value=""></MenuItem>
       {data?.map((item, index) => {
         return (
-          <option value={item?.[value] || item} key={index + item?.[value] || item}>
+          <MenuItem value={item?.[value] || item} key={index + item?.[value] || item}>
             {item?.[label] || item}
-          </option>
+          </MenuItem>
         );
       })}
     </>

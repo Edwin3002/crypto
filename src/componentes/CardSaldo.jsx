@@ -1,26 +1,47 @@
-import React from 'react'
-import { Card } from './CardCurrency'
-import { H3, H4, Paragraph } from './Typography'
-import FlexBox from './FlexBox'
+import { H3, H4, Paragraph } from "./Typography";
+import AppSelect from "./AppSelect";
+import FlexBox from "./FlexBox";
 
-const CardSaldo = (props) => {
+const CardSaldo = () => {
   return (
-    <Card {...props}>
-      <Paragraph fontSize={16}>Mis cryptos</Paragraph>
-      <FlexBox mt={2} gap={1}>
-        <FlexBox alignSelf="flex-start">
-          <img alt="icon cryptomoneda" src="src/assets/_Avatar_.svg" width="25px" />
-        </FlexBox>
-        <FlexBox flexDirection="column" gap={1}>
-          <H3>Bitcoin</H3>
-          <FlexBox flexDirection="row">
-            <H4 fontSize={16}>0.075:</H4>
-            <Paragraph fontSize={16}>&nbsp;$ 0.00</Paragraph>
+    <FlexBox
+      sx={{
+        borderRadius: "0.75rem",
+        border: "1px solid #F0F0F0",
+        background: "#FFF",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: " 0px 4px 8px 0px rgba(0, 0, 0, 0.10)",
+        height: "148px",
+        flexDirection: "column",
+        gap: 2,
+        px: "1.25rem"
+      }}
+    >
+      <FlexBox width justifyContent="flex-start">
+        <Paragraph fontSize={20} fontWeight={400}>Mis cryptos</Paragraph>
+      </FlexBox>  
+        <FlexBox alignItems="center" gap={2}>
+          <img width={"29px"} src="src/assets/_Avatar_.svg" alt="bitcoin" />
+          <FlexBox flexDirection="column">
+            <FlexBox width>
+              <H3>Bitcoin</H3>
+            </FlexBox>
+            <FlexBox>
+              <H4 fontSize={16}>0.001 =</H4>
+                <Paragraph marginRight={"10px"} fontSize={16}>
+                  {" 1.046.882"}
+                </Paragraph>
+                <AppSelect>
+                  <option value="COP">COP</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                </AppSelect>
+            </FlexBox>
           </FlexBox>
         </FlexBox>
-      </FlexBox>
-    </Card>
-  )
-}
+    </FlexBox>
+  );
+};
 
-export default CardSaldo
+export default CardSaldo;

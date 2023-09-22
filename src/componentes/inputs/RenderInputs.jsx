@@ -1,4 +1,4 @@
-import { FormControlLabel, Grid, TextField } from "@mui/material";
+import { FormControlLabel, Grid, Select, TextField } from "@mui/material";
 import AppCheckBox from "../inputs/AppCheckBox";
 import { useFormikContext } from "formik";
 import { H6 } from "../Typography";
@@ -17,6 +17,19 @@ const RenderInputs = ({ data = [], lectura }) => {
             <H6 sx={{ my: 3 }}>{item.title}</H6>
             <Grid container spacing={3}>
               {item.inputs.map((itemInputs, index) => {
+                if (itemInputs.Component) {
+                  return (
+                    <Grid
+                      key={index + itemInputs.name}
+                      item
+                      md={itemInputs.size?.[2] || 12}
+                      sm={itemInputs.size?.[1] || 12}
+                      xs={itemInputs.size?.[0] || 12}
+                    >
+                      {itemInputs.Component}
+                    </Grid>
+                    )
+                }
                 if (itemInputs.type === "text") {
                   return (
                     <Grid
@@ -27,6 +40,31 @@ const RenderInputs = ({ data = [], lectura }) => {
                       xs={itemInputs.size?.[0] || 12}
                     >
                       <TextField
+                        fullWidth
+                        disabled={lectura || itemInputs.disabled}
+                        name={itemInputs.name}
+                        label={itemInputs.label}
+                        variant="outlined"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={itemInputs?.value || values[itemInputs.name]}
+                        helperText={touched[itemInputs.name] && errors[itemInputs.name]}
+                        error={Boolean(touched[itemInputs.name] && errors[itemInputs.name])}
+                      />
+                    </Grid>
+                  );
+                }
+                if (itemInputs.type === "number") {
+                  return (
+                    <Grid
+                      key={index + itemInputs.name}
+                      item
+                      md={itemInputs.size?.[2] || 12}
+                      sm={itemInputs.size?.[1] || 12}
+                      xs={itemInputs.size?.[0] || 12}
+                    >
+                      <TextField
+                        type="number"
                         fullWidth
                         disabled={lectura || itemInputs.disabled}
                         name={itemInputs.name}
@@ -84,7 +122,7 @@ const RenderInputs = ({ data = [], lectura }) => {
                     >
                       <AppTextField
                         fullWidth
-                        sx={{ width: "100%", backgroundColor: itemInputs.disabled ? "#0F1B25": "#0F1B29" }}
+                        sx={{ width: "100%", backgroundColor: itemInputs.disabled ? "#0F1B25" : "#0F1B29" }}
                         multiline
                         rows={3.5}
                         disabled={lectura || itemInputs.disabled}
@@ -123,7 +161,7 @@ const RenderInputs = ({ data = [], lectura }) => {
                         label={itemInputs.label}
                         name={itemInputs.name}
                       />
-                      <H6 sx={{color: "red"}}>
+                      <H6 sx={{ color: "red" }}>
                         {touched[itemInputs.name] && errors[itemInputs.name]}
                         {Boolean(touched[itemInputs.name] && errors[itemInputs.name])}
                       </H6>
